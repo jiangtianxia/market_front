@@ -1,0 +1,112 @@
+/* pages/category/category.wxss */
+
+/* 页顶部类别展示 */
+.category-box {
+  width: 100%;
+}
+
+.category-scroll {
+  width: 100%; 
+  /* height: 60rpx; */
+  white-space: nowrap;
+  /* padding: 20rpx; */
+  margin-bottom: 10rpx;
+}
+
+.category-item {
+  display: inline-block;
+  margin: 10rpx;
+  width: 170rpx;
+  font-size: 40rpx;
+  color: #333;
+  cursor: pointer;
+}
+
+.category-item.selected {
+  color: #f00; 
+  font-size: 45rpx;
+}
+
+/* 内容盒子 */
+.center-box {
+  background: rgb(247, 245, 245);
+  border-top-left-radius: 20px; 
+  border-top-right-radius: 20px;
+}
+
+/* 排序规则筛选 */
+.sort-order-box {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.sort-order-item {
+  width: 237rpx;
+  display: flex; 
+  justify-content: center;
+  align-items: center; 
+  font-size: 37rpx;
+  margin: 20rpx;
+}
+
+.order-text {
+  color: #757373;
+}
+
+.order-text.selected {
+  color: #000000;
+}
+
+.arrow-icon {
+  width: 30rpx;
+  height: 30rpx;
+  margin-left: 2rpx;
+}
+
+
+/* 商品列表 */
+.goods-box {
+  display: flex;
+  flex-direction: row;
+  padding: 0 20rpx;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.good-img {
+  width: 345rpx;
+  height: 400rpx;
+  border-radius: 20rpx;
+}
+
+.good-bootom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+}
+
+.good-title {
+  font-size: 36rpx;
+  margin: 10rpx 10rpx;
+
+  /* 处理文字超出范围, 限制文字显示 */
+  width: 330rpx;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.good-tag {
+  color: rgb(163, 155, 155);
+  font-size: 35rpx;
+}
+
+.good-price {
+  color: red;
+  font-size: 40rpx;
+}

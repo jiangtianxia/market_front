@@ -1,0 +1,105 @@
+/* pages/index/index.wxss */
+
+/* 顶部搜索框 */
+.search-box {
+  width: 100%;
+  /* padding: 5rpx 0; */
+  /* position: absolute; */
+  margin-top: 20rpx;
+}
+
+.search-input {
+  border: 2px solid #999;
+  border-radius: 100px;
+  display: flex;
+  justify-content: space-between;
+  background-color: #00000000;
+  width: 80%;
+  margin: 0 auto;
+  padding: 5rpx 0;
+}
+
+.search-input input {
+  margin-left: 20rpx;
+  font-size: 25rpx;
+}
+
+.search-input icon {
+  margin-right: 10rpx;
+}
+
+
+/* 轮播图 */
+.swiper-box {
+  width: 100%;
+  height: 400rpx; /* 设置轮播图容器的高度 */
+}
+
+.swiper-image {
+  width: 100%;
+  height: 100%;
+}
+
+/* 九宫格 */
+.jiugongge-box {
+  display: flex;
+  margin-bottom: 20rpx;
+}
+
+.jiugongge-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 187rpx;
+}
+
+.jiugongge-item image {
+  width: 140rpx;
+  height: 120rpx;
+  margin-bottom: 20rpx;
+}
+
+/* 商品列表 */
+.goods-box {
+  display: flex;
+  flex-direction: row;
+  padding: 0 20rpx;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.good-img {
+  width: 345rpx;
+  height: 400rpx;
+  border-radius: 20rpx;
+}
+
+.good-bootom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+}
+
+.good-title {
+  font-size: 36rpx;
+  margin: 10rpx 10rpx;
+
+  /* 处理文字超出范围, 限制文字显示 */
+  width: 330rpx;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.good-tag {
+  color: rgb(163, 155, 155);
+  font-size: 35rpx;
+}
+
+.good-price {
+  color: red;
+  font-size: 40rpx;
+}

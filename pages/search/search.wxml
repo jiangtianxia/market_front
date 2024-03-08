@@ -1,0 +1,59 @@
+<!--pages/search/search.wxml-->
+
+<!-- 搜索框 -->
+<view class="search-box">
+  <view class="search-input">
+    <icon type="search" size="20"></icon>
+    <input placeholder="{{hotKeywordList[0].text}}" type='text' bindinput="searchKeywords" value="{{keyword}}"/>
+  </view>
+  <button style=" width: 160rpx; " bindtap="searchBtn">搜索</button>
+</view>
+
+
+<!-- 热门搜索 -->
+<block wx:if="{{isShow}}">
+  <text class="text-title">热门搜索</text>
+  <view class="content-box">
+  <view class="content-item" wx:for="{{hotKeywordList}}" wx:key="id">
+    <text bindtap="hotKeywords" data-text="{{item.text}}">{{item.text}}</text>
+  </view>
+  </view>
+</block>
+
+<!-- 搜索商品展示 -->
+<block wx:else>
+  <!-- 内容部分 -->
+  <view class="center-box">
+    <!-- 排序规则筛选 -->
+    <view class="sort-order-box">
+      <view class="sort-order-item" bindtap="toggleSortOrder" data-type="hot">
+        <text class="order-text {{selectedSortOrder === 'hot' ? 'selected' : ''}}">热门推荐</text>
+      </view>
+      <view class="sort-order-item" bindtap="toggleSortOrder" data-type="price">
+        <text class="order-text {{selectedSortOrder === 'price' ? 'selected' : ''}}">价格</text>
+        <image class="arrow-icon" src="{{currUseArrowIcons.price}}"></image> 
+      </view>
+      <view class="sort-order-item" bindtap="toggleSortOrder" data-type="time">
+        <text class="order-text {{selectedSortOrder === 'time' ? 'selected' : ''}}">时间</text>
+        <image class="arrow-icon" src="{{currUseArrowIcons.time}}"></image> 
+      </view>
+    </view>
+
+
+    <!-- 商品列表 -->
+    <view class="goods-box">
+      <block wx:for="{{goodList}}" wx:key="id">
+        <view bindtap="toGoodDetail" data-id="{{item.id}}">
+          <image src="{{item.cover}}" class="good-img"></image>
+          <view class="good-title">{{item.title}}</view>
+          <view class="good-bootom">
+            <view class="good-tag">{{item.buyersCount}}人购买</view>
+            <view class="good-price">￥{{item.price}}</view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view style="height: 50rpx;"></view>
+</block>

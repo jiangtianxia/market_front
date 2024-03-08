@@ -1,0 +1,127 @@
+/* pages/search/search.wxss */
+
+/* 搜索框 */
+.search-box{
+  display: flex;
+  padding: 10rpx;
+  margin: 20rpx;
+}
+
+.search-box button{
+  background-color: #FFA500;
+  font-size: 25rpx;
+  color: white;
+}
+
+.search-input{
+  display: flex;
+  background-color:	#F5F5F5;
+  border-radius: 10rpx;
+  width: 70%;
+  margin-right: 20rpx;
+  align-items: center;
+  font-size: 25rpx;
+}
+
+/* 热门搜索 */
+.text-title{
+  margin-left: 20rpx;
+  font-weight: 700;
+  font-size: 37rpx;
+}
+.content-box{
+  display: flex;
+  flex-direction: row;
+  flex-wrap:wrap;
+}
+.content-item{
+  font-size: 30rpx;
+  margin:20rpx ;
+  background-color: #F5F5F5;
+  padding: 15rpx;
+  border-radius: 20rpx;
+}
+
+/* 内容盒子 */
+.center-box {
+  background: rgb(247, 245, 245);
+  border-top-left-radius: 20px; 
+  border-top-right-radius: 20px;
+}
+
+/* 排序规则筛选 */
+.sort-order-box {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.sort-order-item {
+  width: 237rpx;
+  display: flex; 
+  justify-content: center;
+  align-items: center; 
+  font-size: 37rpx;
+  margin: 20rpx;
+}
+
+.order-text {
+  color: #757373;
+}
+
+.order-text.selected {
+  color: #000000;
+}
+
+.arrow-icon {
+  width: 30rpx;
+  height: 30rpx;
+  margin-left: 2rpx;
+}
+
+
+/* 商品列表 */
+.goods-box {
+  display: flex;
+  flex-direction: row;
+  padding: 0 20rpx;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.good-img {
+  width: 345rpx;
+  height: 400rpx;
+  border-radius: 20rpx;
+}
+
+.good-bootom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+}
+
+.good-title {
+  font-size: 36rpx;
+  margin: 10rpx 10rpx;
+
+  /* 处理文字超出范围, 限制文字显示 */
+  width: 330rpx;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.good-tag {
+  color: rgb(163, 155, 155);
+  font-size: 35rpx;
+}
+
+.good-price {
+  color: red;
+  font-size: 40rpx;
+}

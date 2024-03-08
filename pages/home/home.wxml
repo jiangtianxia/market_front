@@ -1,0 +1,57 @@
+<!--pages/home/home.wxml-->
+
+<!-- 顶部搜索框 -->
+<view class="search-box">
+  <navigator class="search-input" url="/pages/search/search">
+    <input placeholder="搜搜你需要的东西吧" type='text'/>
+    <icon type="search" size="20" ></icon>
+  </navigator>
+</view>
+
+<!-- 轮播图 -->
+<view class="swiper-box">
+  <swiper class="swiper" indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
+    <block wx:for="{{imageUrls}}" wx:key="index">
+      <swiper-item>
+        <image src="{{item}}" class="swiper-image" />
+      </swiper-item>
+    </block>
+  </swiper>
+</view>
+
+<!-- 九宫格区域 -->
+<view class="jiugongge-box">
+  <view class="jiugongge-item" bindtap="toNewGoodList">
+    <image src="/images/home/new_goods.png"></image>
+    新品推荐
+  </view>
+  <view class="jiugongge-item" bindtap="toOldBookGoodList">
+    <image src="/images/home/book.png"></image>
+    二手书籍
+  </view>
+  <view class="jiugongge-item" bindtap="toDailyGoodList">
+    <image src="/images/home/life.png"></image>
+    日常用品
+  </view>
+  <view class="jiugongge-item" bindtap="toOtherGoodList">
+    <image src="/images/home/more.png"></image>
+    其他物品
+  </view>
+</view>
+
+
+<!-- 商品列表 -->
+<view class="goods-box">
+  <block wx:for="{{goodList}}" wx:key="id">
+    <view bindtap="toGoodDetail" data-id="{{item.id}}">
+      <image src="{{item.cover}}" class="good-img"></image>
+      <view class="good-title">{{item.title}}</view>
+      <view class="good-bootom">
+        <view class="good-tag">{{item.buyersCount}}人购买</view>
+        <view class="good-price">￥{{item.price}}</view>
+      </view>
+    </view>
+  </block>
+</view>
+
+<view style="height: 50rpx;"></view>

@@ -1,0 +1,47 @@
+<!-- pages/category/category.wxml -->
+
+<!-- 页顶部类别展示 -->
+<view class="category-box">
+  <scroll-view class="category-scroll" scroll-x="true">
+    <view class="category-item {{selectedCategoryIndex == index ? 'selected' : ''}}" wx:for="{{categories}}" wx:key="index" data-index="{{index}}" bindtap="selectCategory">{{item}}</view>
+  </scroll-view>
+</view>
+
+
+<!-- 内容部分 -->
+<view class="center-box">
+  <!-- 排序规则筛选 -->
+  <view class="sort-order-box">
+    <view class="sort-order-item" bindtap="toggleSortOrder" data-type="hot">
+      <text class="order-text {{selectedSortOrder === 'hot' ? 'selected' : ''}}">热门推荐</text>
+    </view>
+    <view class="sort-order-item" bindtap="toggleSortOrder" data-type="price">
+      <text class="order-text {{selectedSortOrder === 'price' ? 'selected' : ''}}">价格</text>
+      <image class="arrow-icon" src="{{currUseArrowIcons.price}}"></image> 
+    </view>
+    <view class="sort-order-item" bindtap="toggleSortOrder" data-type="time">
+      <text class="order-text {{selectedSortOrder === 'time' ? 'selected' : ''}}">时间</text>
+      <image class="arrow-icon" src="{{currUseArrowIcons.time}}"></image> 
+    </view>
+  </view>
+
+
+  <!-- 商品列表 -->
+  <view class="goods-box">
+    <block wx:for="{{goodList}}" wx:key="id">
+      <view bindtap="toGoodDetail" data-id="{{item.id}}">
+        <image src="{{item.cover}}" class="good-img"></image>
+        <view class="good-title">{{item.title}}</view>
+        <view class="good-bootom">
+          <view class="good-tag">{{item.buyersCount}}人购买</view>
+          <view class="good-price">￥{{item.price}}</view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
+
+<!-- <view style="height: 50rpx; background-color: rgb(247, 245, 245);"> </view> -->
+
+
+
