@@ -1,1 +1,186 @@
 /* pages/cart/cart.wxss */
+page {
+  background-color: rgb(240, 240, 240);
+}
+
+/* 购物车商品列表 */
+.good-box {
+  display: flex;
+  flex-direction: row;
+  margin: 20rpx 0;
+  align-items: center;
+  background-color: white;
+  border-radius: 10rpx;
+}
+
+.choose-img {
+  width: 60rpx;
+  height: 60rpx;
+  margin: 0 10rpx;
+}
+
+.good-cover {
+  width: 150rpx;
+  height: 150rpx;
+}
+
+.good-right {
+  display: flex;
+  flex-direction: column;
+  width: 520rpx;
+  height: 180rpx;
+  margin-left: 10rpx;
+  margin-right: 20rpx;
+}
+
+.good-title {
+  padding-top: 10rpx;
+  font-size: 45rpx;
+
+  /* 处理文字超出范围, 限制文字显示 */
+  width: 500rpx;
+  height: 80rpx;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.good-stock {
+  color: rgb(163, 155, 155);
+  font-size: 30rpx;
+  height: 30rpx;
+  margin-bottom: 0;
+}
+
+.good-price {
+  color: red;
+  font-size: 35rpx;
+  font-weight: 500;
+}
+
+.good-right-bottom-box {
+  height: 80rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 0;
+  align-items: center;
+}
+
+.good-right-bottom {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.type-good-num {
+  /* margin: 0 15rpx; */
+  font-weight: 500;
+  width: 70rpx;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.add-delete-img {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+/* 删除商品提示 */
+.delete-desc {
+  width: 100%;
+  height: 60rpx;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  color: rgb(163, 155, 155);
+}
+
+/* 购物车为空时的提示 */
+.empty-cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 100px;
+}
+
+.empty-cart-image {
+  width: 150px;
+  height: 150px;
+}
+
+.empty-cart-text {
+  font-size: 16px;
+  color: #999;
+  margin-top: 20px;
+}
+
+
+/* 底部悬浮框样式 */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100rpx;
+  background-color: #fff;
+  border-top: 1px solid rgb(211, 211, 211);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+/* 全选按钮 */
+.select-all-box {
+  width: 200rpx;
+  height: 100%;
+  margin-left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 10rpx;
+}
+
+.select-all-img {
+  width: 60rpx;
+  height: 60rpx;
+  margin-right: 10rpx;
+}
+
+.select-all-text {
+  font-size: 16px;
+  color: #333;
+}
+
+/* 合计与结算样式 */
+.bottom-bar-right {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-right: 0;
+}
+
+.total-price {
+  font-size: 16px;
+  color: #f00;
+  display: flex;
+  align-items: center;
+  margin-right: 10rpx;
+}
+
+.submit-box {
+  width: 100rpx;
+  height: 100%;
+  background-color: red;
+  line-height: 100rpx;
+  color: white;
+  padding: 0 40rpx;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
