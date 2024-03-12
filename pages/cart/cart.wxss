@@ -147,13 +147,13 @@ page {
 }
 
 .select-all-img {
-  width: 60rpx;
-  height: 60rpx;
+  width: 50rpx;
+  height: 50rpx;
   margin-right: 10rpx;
 }
 
 .select-all-text {
-  font-size: 16px;
+  font-size: 13px;
   color: #333;
 }
 
@@ -167,7 +167,7 @@ page {
 
 .total-price {
   font-size: 16px;
-  color: #f00;
+  color: #FF6146;
   display: flex;
   align-items: center;
   margin-right: 10rpx;
@@ -176,7 +176,7 @@ page {
 .submit-box {
   width: 100rpx;
   height: 100%;
-  background-color: red;
+  background-color: #FF6146;
   line-height: 100rpx;
   color: white;
   padding: 0 40rpx;
