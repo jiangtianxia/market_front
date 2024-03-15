@@ -6,7 +6,8 @@
     "pages/cart/cart",
     "pages/mine/mine",
     "pages/search/search",
-    "pages/good_detail/good_detail"
+    "pages/good_detail/good_detail",
+    "pages/order/order"
   ],
   "tabBar": {
     "selectedColor": "#ee6d4b",

@@ -33,7 +33,7 @@
 
     <view class="bottom-bar-right">
       <view class="total-price">合计：{{totalPrice}}元</view>
-      <view class="submit-box" bindtap="submit">结算</view>
+      <view class="submit-box" bindtap="toOrder">结算</view>
     </view>
   </view>
 </view>

@@ -1,0 +1,6 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "订单信息",
+  "onReachBottomDistance": 10,
+  "backgroundTextStyle": "light"
+}

@@ -163,8 +163,10 @@ Page({
     });
   },
 
-  // 提交结算
-  submit() {
-
+  // 提交结算, 跳转订单页面
+  toOrder() {
+    wx.navigateTo({
+      url: '/pages/order/order',
+    })
   }
 })
