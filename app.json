@@ -13,7 +13,9 @@
     "pages/address/address_create/address_create",
     "pages/address/address_edit/address_edit",
     "pages/address/address_list/address_list",
-    "pages/mine/seller_order/seller_order"
+    "pages/mine/seller_order/seller_order",
+    "pages/mine/my_release/my_release",
+    "pages/mine/my_release/edit_good/edit_good"
   ],
   "tabBar": {
     "selectedColor": "#ee6d4b",

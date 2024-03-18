@@ -63,6 +63,13 @@ Page({
     })
   },
 
+  // 跳转"我的发布"页面
+  toMyRelease() {
+    wx.navigateTo({
+      url: '/pages/mine/my_release/my_release',
+    })
+  },
+
   // 跳转"商家订单"页面
   toSellerOrder() {
     wx.navigateTo({

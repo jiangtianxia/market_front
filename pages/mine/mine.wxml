@@ -18,6 +18,13 @@
       </view>
       <view class="right">></view>
     </button>
+    <button class="row" style="width: 100%" bindtap="toMyRelease">
+      <view class="left">
+        <image class= "icon" src="/images/my_release.png"></image>
+        <text class="text">我的发布</text>
+      </view>
+      <view class="right">></view>
+    </button>
     <button class="row" style="width: 100%;" bindtap="toSellerOrder">
       <view class="left">
         <image class= "icon" src="/images/seller_order.png"></image>
@@ -69,5 +76,5 @@
   </button>
 </view>
 <view class="footer">
-  <text>©微信小程序个人中心@wxd</text>
+  <text>©微信小程序个人中心@jzb</text>
 </view>

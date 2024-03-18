@@ -1,0 +1,87 @@
+<!--pages/mine/my_release/edit_good/edit_good.wxml-->
+<view class="container">
+  <!-- 商品名称 -->
+  <view class="form-group">
+    <text class="label">名称：</text>
+    <input class="input" type="text" placeholder="请输入商品名称" bindinput="inputName" value="{{name}}"/>
+  </view>
+
+  <!-- 商品分类 -->
+  <view class="form-group">
+    <text class="label">分类：</text>
+    <picker class="category-picker" mode="selector" range="{{categoryOptions}}" bindchange="selectCategory" >
+      <input class="category-input" placeholder="请选择分类" value="{{selectedCategory}}" type='text'  disabled/>
+    </picker>
+  </view>
+
+
+  <!-- 商品价格 -->
+  <view class="form-group">
+    <text class="label">价格：</text>
+    <input class="input" type="digit" value="{{price}}" placeholder="请输入价格" bindinput="inputPrice" />
+  </view>
+
+  <!-- 商品库存 -->
+  <view class="form-group">
+    <text class="label">库存：</text>
+    <input class="input" type="number" placeholder="请输入库存数量" bindinput="inputStock" value="{{stock}}"/>
+  </view>
+
+  <!-- 商品封面 -->
+  <view class="cover-form-group">
+    <text class="label">封面：</text>
+    <view class="cover-img-box">
+      <block wx:if="{{!coverUrl}}">
+        <button class="up-cover-but" bindtap="chooseCoverImage">+</button>
+      </block>   
+      <block wx:else>
+        <view class="cover-preview">
+          <image class="cover-image" src="{{coverUrl}}"></image>
+          <image class="cover-remove-icon" src="/images/delete-img.png" bindtap="removeCoverImage" ></image>
+        </view>
+      </block> 
+    </view>   
+  </view>
+
+  <!-- 商品描述 -->
+  <view class="description-form-group">
+    <text class="description-label">描述：</text>
+    <textarea class="description-textarea" maxlength="1000" placeholder="请输入商品描述" bindinput="inputDescription" value="{{description}}"></textarea>
+  </view>
+
+  <!-- 商品描述图片 -->
+  <view class="description-img-form-group">
+    <text class="description-img-label">描述图片：</text>
+    <view class="description-images">
+      <!-- 循环渲染图片 -->
+      <block wx:for="{{descriptionImagesUrl}}" wx:for-item="imageUrl" wx:key="index">
+        <view class="desc-img-item">
+          <image src="{{imageUrl}}" class="desc-img" mode="aspectFill"></image>
+          <image src="/images/delete-img.png" class="desc-img-remove-icon" bindtap="removeDescImage" data-index="{{index}}"></image>
+        </view>
+      </block>
+
+      <!-- 根据数组长度判断是否显示上传按钮 -->
+      <view wx:if="{{descriptionImagesUrl.length < 9}}" class="up-desc-img-but" bindtap="chooseDescImages">+</view>
+    </view>
+  </view>
+
+  <!-- 联系人 -->
+  <view class="form-group">
+    <text class="contact-label">联系人：</text>
+    <input class="contact-input" placeholder="请输入联系人姓名" bindinput="inputContact" value="{{contact}}"/> 
+  </view>
+
+  <!-- 联系电话 -->
+  <view class="form-group">
+    <text class="phone-label">联系电话：</text>
+    <input class="phone-input" type="number" value="{{phone}}" placeholder="请输入联系电话" bindinput="inputPhone" />
+  </view>
+
+  <!-- 发布按钮 -->
+  <view class="submit-btn-box">
+    <button class="submit-btn" bindtap="submitForm">
+      <text>保存信息</text>
+    </button>
+  </view>
+</view>
