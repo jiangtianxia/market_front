@@ -1,0 +1,103 @@
+/* pages/address/address_list/address_list.wxss */
+
+page {
+  background-color: rgb(240, 240, 240);
+}
+
+.hidden {
+  display: none;
+}
+
+.addresses {
+  width: 100%;
+  padding-top: 10rpx;
+  padding-bottom: 100rpx;
+}
+
+.address {
+  font-size: 30rpx;
+  background: #FFF;
+  margin-top: 10rpx;
+  display: flex;
+  border-radius: 5px;
+  flex-direction: row;
+}
+
+.select-box {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.choose-img {
+  margin: 25rpx 5rpx 15rpx 20rpx;
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.detail {
+  font-size: 30rpxx;
+  margin: 20rpx 20rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+}
+
+.customer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.reciver {
+  width: 15rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  float: left;
+}
+
+.addr {
+  margin-top: 5rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 28rpx;
+  color: #353535;
+  line-height: 30rpx;
+}
+
+
+/* 新增地址按钮 */
+.addresses .btnBox {
+  position: fixed;
+  width: 100%;
+  padding: 20rpx;
+  bottom: 0;
+  box-sizing: border-box;
+}
+
+.addresses .add {
+  height: 70rpx;
+  line-height: 70rpx;
+  bottom: 10rpx;
+  background-color: #FF2D4B;
+  color: #FFF;
+  text-align: center;
+  border-radius: 5rpx;
+  font-size: 0.75rem;
+}
+
+.addresses .add:active {
+  background-color: #999;
+}
+
+/* 收货地址为空 */
+.empty-tip {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}

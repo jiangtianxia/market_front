@@ -35,6 +35,9 @@ Page({
 
   // 用户点击"收货地址", 选择地址
   chooseAddress() {
+    wx.navigateTo({
+      url: '/pages/address/address_list/address_list',
+    })
     console.log("选择地址")
     this.setData({
       addressInfo: {
@@ -56,6 +59,32 @@ Page({
 
   // 提交订单
   submitOrder() {
-    console.log("提交订单")
+    wx.showModal({
+      title: '提示',
+      content: '是否支付商品价格' + this.data.totalPrice + '元',
+      confirmText: '支付',
+      complete: (res) => {
+        if (res.confirm == true) {
+          wx.navigateBack({
+            delta: 0,
+            success(){
+              wx.showToast({
+                title: '支付成功',
+              })
+            }
+          })
+        } else {
+          wx.navigateBack({
+            delta: 0,
+            success(){
+              wx.showToast({
+                icon: 'error',
+                title: '支付失败',
+              })
+            }
+          })
+        }
+      }
+    })
   }
 })

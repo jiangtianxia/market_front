@@ -1,2 +1,73 @@
 <!--pages/mine/mine.wxml-->
-<text>pages/mine/mine.wxml</text>
+
+<view class="top-bg"></view>
+<view class="box">
+  <!-- 头像 -->
+  <view class="head-box">
+    <button open-type="chooseAvatar" class="avatar" bindchooseavatar="chooseAvatar">
+      <image class="head-img" src="{{login.avatar}}" mode="widthFix"></image>
+    </button>
+    <view class="tip">{{login.show?'欢迎使用':'当前未登录，请登录！'}}</view>
+  </view>
+  <!-- 第一部分列表 -->
+  <view>
+    <button class="row" style="width: 100%;" bindtap="toMyOrder">
+      <view class="left">
+        <image class= "icon" src="/images/my_order.png"></image>
+        <text class="text">我的订单</text>
+      </view>
+      <view class="right">></view>
+    </button>
+    <button class="row" style="width: 100%;" bindtap="toSellerOrder">
+      <view class="left">
+        <image class= "icon" src="/images/seller_order.png"></image>
+        <text class="text">商家订单</text>
+      </view>
+      <view class="right">></view>
+    </button>
+    <button class="row" style="width: 100%;border-bottom: none;" bindtap="toAddress">
+      <view class="left">
+        <image class= "icon" src="/images/addr.png"></image>
+        <text class="text">地址管理</text>
+      </view>
+      <view class="right">></view>
+    </button>
+  </view>
+</view>
+<!-- 第二部分列表 -->
+<view class="end">
+  <button open-type="share" class="row" style="width: 100%;">
+    <view class="left">
+      <image class= "icon" src="/images/share.png"></image>
+      <text class="text">分享好友</text>
+    </view>
+    <view class="right">></view>
+  </button>
+  <button open-type="contact" class="row" style="width: 100%;border-bottom: none;">
+    <view class="left">
+      <image class= "icon" src="/images/kefu.png"></image>
+      <text class="text">在线客服</text>
+    </view>
+    <view class="right">></view>
+  </button>
+</view>
+<!-- 第三部分列表 -->
+<view class="end">
+  <button wx:if="{{login.line}}" bindtap="exitClick" class="row" style="width: 100%;border-bottom: none;">
+    <view class="left">
+      <image class= "icon" src="/images/login_out.png"></image>
+      <text class="text">退出登录</text>
+    </view>
+    <view class="right">></view>
+  </button>
+  <button class="row" open-type="chooseAvatar" bindchooseavatar="chooseAvatar" style="width: 100%;border-bottom: none;" wx:else>
+    <view class="left">
+      <image class= "icon" src="/images/login.png"></image>
+      <text class="text">立即登录</text>
+    </view>
+    <view class="right">></view>
+  </button>
+</view>
+<view class="footer">
+  <text>©微信小程序个人中心@wxd</text>
+</view>

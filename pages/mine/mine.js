@@ -5,7 +5,11 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    login: {
+      show: false,
+      line: false,
+      avatar: '/images/default_avatar.jpg',
+    }
   },
 
   /**
@@ -15,52 +19,61 @@ Page({
 
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  // 登录监听
+  chooseAvatar(e) {
+    console.log(e)
+    this.setData({
+      login: {
+        show: true,
+        line: true,
+        avatar: e.detail.avatarUrl,
+      }
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
+  // 登录
+  login() {
+    
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
 
+  // 退出监听
+  exitClick() {
+    let that = this;
+    wx.showModal({
+      title: '提示',
+      content: '确定退出登录吗？',
+      success(res) {
+        if (res.confirm) {
+          that.setData({
+            login: {
+              show: false,
+              avatar: '/images/default_avatar.jpg',
+            }
+          })
+        }
+      }
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
+  // 跳转"我的订单"页面
+  toMyOrder() {
+    wx.navigateTo({
+      url: '/pages/mine/my_order/my_order',
+    })
   },
 
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
+  // 跳转"商家订单"页面
+  toSellerOrder() {
+    wx.navigateTo({
+      url: '/pages/mine/seller_order/seller_order',
+    })
   },
 
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
+  // 跳转"地址管理"页面
+  toAddress() {
+    wx.navigateTo({
+      url: '/pages/address/address',
+    })
   },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  }
 })

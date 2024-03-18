@@ -7,7 +7,13 @@
     "pages/mine/mine",
     "pages/search/search",
     "pages/good_detail/good_detail",
-    "pages/order/order"
+    "pages/order/order",
+    "pages/mine/my_order/my_order",
+    "pages/address/address",
+    "pages/address/address_create/address_create",
+    "pages/address/address_edit/address_edit",
+    "pages/address/address_list/address_list",
+    "pages/mine/seller_order/seller_order"
   ],
   "tabBar": {
     "selectedColor": "#ee6d4b",

@@ -1,0 +1,55 @@
+/* pages/address/address_edit/address_edit.wxss */
+
+.container {
+  width: 100%;
+  padding: 20rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 20rpx;
+}
+
+.label {
+  color: #302f2f;
+  width: 150rpx;
+}
+
+.input {
+  height: 80rpx;
+  width: 600rpx;
+  border: 1rpx solid #ccc;
+  border-radius: 10rpx;
+}
+
+.address-form-group {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 30rpx;
+}
+
+.address-label {
+  color: #302f2f;
+  width: 180rpx;
+}
+
+.address-textarea {
+  width: 600rpx;
+  height: 150rpx;
+  border: 1rpx solid #ccc;
+  border-radius: 10rpx;
+}
+
+.submit-btn {
+  background-color: #f38d7a;
+  color: #fff;
+  border: none;
+  font-size: 36rpx;
+  cursor: pointer;
+}

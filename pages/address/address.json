@@ -1,6 +1,6 @@
 {
   "usingComponents": {},
-  "navigationBarTitleText": "个人中心",
+  "navigationBarTitleText": "地址管理",
   "onReachBottomDistance": 10,
   "backgroundTextStyle": "light"
 }
