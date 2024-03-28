@@ -78,3 +78,5 @@
 <view class="footer">
   <text>©微信小程序个人中心@jzb</text>
 </view>
+
+<loading hidden="{{!logining}}">登录中...</loading>

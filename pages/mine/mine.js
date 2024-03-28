@@ -1,4 +1,7 @@
 // pages/mine/mine.js
+var util = require('../../util.js')
+var app = getApp()
+
 Page({
 
   /**
@@ -9,7 +12,8 @@ Page({
       show: false,
       line: false,
       avatar: '/images/default_avatar.jpg',
-    }
+    },
+    logining : false,
   },
 
   /**
@@ -19,21 +23,83 @@ Page({
 
   },
 
-  // 登录监听
-  chooseAvatar(e) {
-    console.log(e)
-    this.setData({
-      login: {
-        show: true,
-        line: true,
-        avatar: e.detail.avatarUrl,
-      }
-    })
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow() {
+    const avatarUrl = util.GetStorageSyncTime("avatar_url");
+    if (avatarUrl != "") {
+      this.setData({
+        login: {
+          show: true,
+          line: true,
+          avatar: avatarUrl,
+        }
+      })
+    }
   },
 
-  // 登录
-  login() {
-    
+  // 登录监听
+  chooseAvatar(e) {
+    let that = this
+    that.setData({
+      logining: true
+    })
+
+    wx.login({
+      success (res) {
+        if (res.code) {
+          // 发起网络请求
+          wx.request({
+            method: 'POST',
+            url: 'http://127.0.0.1:8888/market/api/v1/user/login',
+            data: {
+              code: res.code
+            },
+            success(res) {
+              // 判断登录是否成功
+              if (res.data.code !== 0) {
+                that.setData({
+                  logining: false
+                })
+
+                // 显示错误提示
+                wx.showToast({
+                  title: res.data.message || '登录失败',
+                  icon: 'error',
+                  duration: 2000
+                })
+                return
+              }
+
+              // 登录成功，获取具体数据
+              const { openid, token } = res.data.data;
+
+              // 设置头像
+              util.SetStorageSyncSecond("avatar_url", e.detail.avatarUrl, )
+
+              // 设置openid
+              util.SetStorageSyncSecond("openid", openid, )
+
+              // 设置token缓存
+              util.SetStorageSyncSecond("token", token, )              
+
+              // 设置头像
+              that.setData({
+                login: {
+                  show: true,
+                  line: true,
+                  avatar: e.detail.avatarUrl,
+                },
+                logining: false
+              })
+            }
+          })   
+          return
+        }
+        return
+      }
+    })
   },
 
 
