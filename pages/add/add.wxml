@@ -3,7 +3,7 @@
   <!-- 商品名称 -->
   <view class="form-group">
     <text class="label">名称：</text>
-    <input class="input" type="text" placeholder="请输入商品名称" bindinput="inputName" value="{{name}}"/>
+    <input class="input" type="text" placeholder="请输入商品名称" maxlength="100" bindinput="inputName" value="{{name}}"/>
   </view>
 
   <!-- 商品分类 -->
@@ -69,7 +69,7 @@
   <!-- 联系人 -->
   <view class="form-group">
     <text class="contact-label">联系人：</text>
-    <input class="contact-input" placeholder="请输入联系人姓名" bindinput="inputContact" value="{{contact}}"/> 
+    <input class="contact-input" placeholder="请输入联系人姓名" bindinput="inputContact" maxlength="30" value="{{contact}}"/> 
   </view>
 
   <!-- 联系电话 -->
@@ -85,3 +85,6 @@
     </button>
   </view>
 </view>
+
+
+<loading hidden="{{!uploading}}">图片上传中...</loading>

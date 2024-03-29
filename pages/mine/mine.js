@@ -1,5 +1,5 @@
 // pages/mine/mine.js
-var util = require('../../util.js')
+var util = require('../../utils/utils.js')
 var app = getApp()
 
 Page({
@@ -27,6 +27,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
+    this.setData({
+      logining : false
+    })
     const avatarUrl = util.GetStorageSyncTime("avatar_url");
     if (avatarUrl != "") {
       this.setData({
@@ -37,6 +40,8 @@ Page({
         }
       })
     }
+    console.log(util.GetStorageSyncTime("token"))
+    console.log(util.GetStorageSyncTime("openid"))
   },
 
   // 登录监听
@@ -111,12 +116,51 @@ Page({
       content: '确定退出登录吗？',
       success(res) {
         if (res.confirm) {
-          that.setData({
-            login: {
-              show: false,
-              avatar: '/images/default_avatar.jpg',
+          const openid = util.GetStorageSyncTime("openid")
+
+          if (openid == "") {
+            that.setData({
+              login: {
+                show: false,
+                avatar: '/images/default_avatar.jpg',
+              }
+            })
+            return
+          }
+
+          // 发起请求
+          wx.request({
+            method: 'POST',
+            url: 'http://127.0.0.1:8888/market/api/v1/user/logout',
+            data: {
+              openid: openid
+            },
+            success(res) {
+              // 判断退出是否成功
+              if (res.data.code !== 0) {
+                // 显示错误提示
+                wx.showToast({
+                  title: res.data.message || '退出失败',
+                  icon: 'error',
+                  duration: 2000
+                })
+                return
+              }
+
+              // 删除缓存
+              util.DelStorageSyncTime("avatar_url")
+              util.DelStorageSyncTime("openid")
+              util.DelStorageSyncTime("token")         
+
+              // 设置默认头像
+              that.setData({
+                login: {
+                  show: false,
+                  avatar: '/images/default_avatar.jpg',
+                }
+              })
             }
-          })
+          })   
         }
       }
     })

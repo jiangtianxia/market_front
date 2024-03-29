@@ -17,7 +17,8 @@ const formatNumber = n => {
 module.exports = {
   formatTime,
   SetStorageSyncSecond,
-  GetStorageSyncTime
+  GetStorageSyncTime,
+  DelStorageSyncTime
 }
 
   /**
@@ -58,4 +59,13 @@ function GetStorageSyncTime(key){
   }else{
     return ""
   }
+}
+
+/**
+ * 删除时效缓存
+ *  key  删除的key值
+ */
+function DelStorageSyncTime(key){
+  wx.removeStorageSync(key)
+  wx.removeStorageSync(key + 'dtime')
 }

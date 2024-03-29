@@ -1,4 +1,9 @@
 // pages/add/add.js
+
+var cos = require('../../utils/cos.js')
+var util = require('../../utils/utils.js')
+
+
 Page({
 
   /**
@@ -9,13 +14,25 @@ Page({
     description: '',
     price: '',
     stock: '',
-    coverUrl: '',
+    coverUrl: "",
+    coverKey: "",
     descriptionImagesUrl: [],
+    descriptionImagesKey: [],
     maxDescImageCount: 9,
     selectedCategory: '',
     categoryOptions: ['二手书籍', '日常用品', '其他物品'],
     contact: '',
-    phone: ''
+    phone: '',
+    uploading: false,
+  },
+
+    /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow() {
+    this.setData({
+      uploading : false
+    })
   },
 
   // 输入商品名称
@@ -90,28 +107,82 @@ Page({
 
   // 选择封面图片
   chooseCoverImage() {
+    let that = this
     wx.chooseMedia({
       count: 1,
       mediaType: ['image'],
       sourceType: ['album', 'camera'],
       success: (res) => {
+        that.setData({
+          uploading: true,
+        });
+
         const tempFilePath = res.tempFiles[0].tempFilePath;
-        this.setData({
-          coverUrl: tempFilePath
+
+        // 构建cos保存路径
+        let openid = util.GetStorageSyncTime("openid")
+        let fileArr = tempFilePath.split('/')
+        let key = openid + "/coverImg/" + Date.parse(new Date()) + fileArr[fileArr.length-1]
+
+        // 上传文件至COS
+        cos.GetCOSSDK().putObject({
+          Bucket: cos.GetCOSBucket(),
+          Region: cos.GetCOSRegion(),
+          Key: key,
+          FilePath: tempFilePath,
+        }, 
+        function (err, data) {
+          that.setData({
+            uploading: false,
+          });
+
+          // 上传失败
+          if (err) {
+            wx.showToast({
+              title: '封面上传失败',
+              icon: 'error',
+              duration: 2000
+            })
+            console.error(err)
+            return
+          }
+
+          // 更新封面
+          that.setData({
+            coverUrl: 'https://' + data.Location,
+            coverKey: key,
+            uploading: false,
+          });
         });
       }
     });
   },
 
+
   // 移除封面图片
   removeCoverImage() {
+    let key = this.data.coverKey
     this.setData({
-      coverUrl: ''
+      coverUrl: '',
+      coverKey: ''
     });
+
+    // 删除cos图片
+    cos.GetCOSSDK().deleteObject({
+      Bucket: cos.GetCOSBucket(),
+      Region: cos.GetCOSRegion(),
+      Key: key,
+    }, 
+    function (err, data) {
+      if (err) {
+        console.error("removeCoverImage failed", err)
+      }
+    })
   },
 
   // 选择描述图片
   chooseDescImages() {
+    var that = this
     const currLen = this.data.descriptionImagesUrl.length
     if (currLen == this.data.maxDescImageCount) {
       return
@@ -124,13 +195,55 @@ Page({
       success: (res) => {
         const tempFiles = res.tempFiles;
         const currImg = this.data.descriptionImagesUrl;
+        const currKey = this.data.descriptionImagesKey;
+
+        this.setData({
+          uploading: true,
+        });
 
         for (let i = 0; i < tempFiles.length; i++) {
-          currImg.push(tempFiles[i].tempFilePath)
+          const tempFilePath = res.tempFiles[i].tempFilePath;
+
+          // 构建cos保存路径
+          let openid = util.GetStorageSyncTime("openid")
+          let fileArr = tempFilePath.split('/')
+          let key = openid + "/descImg/" + Date.parse(new Date()) + fileArr[fileArr.length-1]
+  
+          // 上传文件至COS
+          cos.GetCOSSDK().putObject({
+            Bucket: cos.GetCOSBucket(),
+            Region: cos.GetCOSRegion(),
+            Key: key,
+            FilePath: tempFilePath,
+          }, 
+          function (err, data) {
+            // 上传失败
+            if (err) {
+              this.setData({
+                uploading: false,
+              });
+              wx.showToast({
+                title: '描述图片上传失败',
+                icon: 'error',
+                duration: 2000
+              })
+              console.error(err)
+              return
+            }
+  
+            // 保存图片
+            currImg.push('https://' + data.Location)
+            currKey.push(key)
+
+            if (i == tempFiles.length-1) {
+              that.setData({
+                descriptionImagesUrl: currImg,
+                descriptionImagesKey: currKey,
+                uploading: false,
+              });
+            }
+          });
         }
-        this.setData({
-          descriptionImagesUrl: currImg
-        });
       }
     });
   },
@@ -139,10 +252,27 @@ Page({
   removeDescImage(e) {
     const index = e.currentTarget.dataset.index;
     const currImg = this.data.descriptionImagesUrl;
+    const currKey = this.data.descriptionImagesKey;
+
+    let delKey = currKey[index]
     currImg.splice(index, 1);
+    currKey.splice(index, 1);
     this.setData({
-      descriptionImagesUrl: currImg
+      descriptionImagesUrl: currImg,
+      descriptionImagesKey: currKey
     });
+
+    // 删除cos图片
+    cos.GetCOSSDK().deleteObject({
+      Bucket: cos.GetCOSBucket(),
+      Region: cos.GetCOSRegion(),
+      Key: delKey,
+    }, 
+    function (err, data) {
+        if (err) {
+          console.error("removeDescImage failed", err)
+        }
+    })
   },
 
   // 发布商品
