@@ -4,7 +4,7 @@
 <view class="search-box">
   <view class="search-input">
     <icon type="search" size="20"></icon>
-    <input placeholder="{{hotKeywordList[0].text}}" type='text' bindinput="searchKeywords" value="{{keyword}}"/>
+    <input type='text' bindinput="searchKeywords" value="{{keyword}}"/>
   </view>
   <button style=" width: 160rpx; " bindtap="searchBtn">搜索</button>
 </view>
@@ -12,12 +12,12 @@
 
 <!-- 热门搜索 -->
 <block wx:if="{{isShow}}">
-  <text class="text-title">热门搜索</text>
+  <!-- <text class="text-title">热门搜索</text>
   <view class="content-box">
   <view class="content-item" wx:for="{{hotKeywordList}}" wx:key="id">
     <text bindtap="hotKeywords" data-text="{{item.text}}">{{item.text}}</text>
   </view>
-  </view>
+  </view> -->
 </block>
 
 <!-- 搜索商品展示 -->
@@ -42,12 +42,12 @@
 
     <!-- 商品列表 -->
     <view class="goods-box">
-      <block wx:for="{{goodList}}" wx:key="id">
+      <block wx:for="{{goodsList}}" wx:key="id">
         <view bindtap="toGoodDetail" data-id="{{item.id}}">
-          <image src="{{item.cover}}" class="good-img"></image>
+          <image src="{{item.cover_url}}" class="good-img"></image>
           <view class="good-title">{{item.title}}</view>
           <view class="good-bootom">
-            <view class="good-tag">{{item.buyersCount}}人购买</view>
+            <view class="good-tag">{{item.buy_count}}人购买</view>
             <view class="good-price">￥{{item.price}}</view>
           </view>
         </view>
@@ -55,5 +55,9 @@
     </view>
   </view>
 
+  <loading hidden="{{!loading}}">加载中...</loading>
+  <view class="empty-goods"  hidden="{{!emptyGoodsFlag}}">
+    <text class="empty-goods-text" hidden="{{!emptyGoodsFlag}}">已经到底部了, 已无更多商品！！！</text>
+  </view>
   <view style="height: 50rpx;"></view>
 </block>

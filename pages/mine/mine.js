@@ -28,8 +28,9 @@ Page({
    */
   onShow() {
     this.setData({
-      logining : false
+      logining: false
     })
+
     const avatarUrl = util.GetStorageSyncTime("avatar_url");
     if (avatarUrl != "") {
       this.setData({
@@ -40,8 +41,8 @@ Page({
         }
       })
     }
-    console.log(util.GetStorageSyncTime("token"))
-    console.log(util.GetStorageSyncTime("openid"))
+    // console.log(util.GetStorageSyncTime("token"))
+    // console.log(util.GetStorageSyncTime("openid"))
   },
 
   // 登录监听
@@ -61,6 +62,21 @@ Page({
             data: {
               code: res.code
             },
+            fail(res) {
+              that.setData({
+                logining: false
+              })
+
+              console.error(res)
+
+              // 显示错误提示
+              wx.showToast({
+                title: '登录失败' + res.errMsg,
+                icon: 'error',
+                duration: 2000
+              })
+              return              
+            },
             success(res) {
               // 判断登录是否成功
               if (res.data.code !== 0) {
@@ -70,7 +86,7 @@ Page({
 
                 // 显示错误提示
                 wx.showToast({
-                  title: res.data.message || '登录失败',
+                  title: '登录失败, '+ res.data.message,
                   icon: 'error',
                   duration: 2000
                 })
@@ -135,6 +151,17 @@ Page({
             data: {
               openid: openid
             },
+            fail(res) {
+              console.error(res)
+
+              // 显示错误提示
+              wx.showToast({
+                title: '退出登录失败' + res.errMsg,
+                icon: 'error',
+                duration: 2000
+              })
+              return                   
+            },
             success(res) {
               // 判断退出是否成功
               if (res.data.code !== 0) {
@@ -168,6 +195,17 @@ Page({
 
   // 跳转"我的订单"页面
   toMyOrder() {
+    // 判断是否登录
+    let openid = util.GetStorageSyncTime("openid")
+    if (openid == "") {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+        duration: 2000
+      })
+      return 
+    }
+
     wx.navigateTo({
       url: '/pages/mine/my_order/my_order',
     })
@@ -175,6 +213,17 @@ Page({
 
   // 跳转"我的发布"页面
   toMyRelease() {
+    // 判断是否登录
+    let openid = util.GetStorageSyncTime("openid")
+    if (openid == "") {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+        duration: 2000
+      })
+      return 
+    }
+
     wx.navigateTo({
       url: '/pages/mine/my_release/my_release',
     })
@@ -182,6 +231,17 @@ Page({
 
   // 跳转"商家订单"页面
   toSellerOrder() {
+    // 判断是否登录
+    let openid = util.GetStorageSyncTime("openid")
+    if (openid == "") {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+        duration: 2000
+      })
+      return 
+    }
+
     wx.navigateTo({
       url: '/pages/mine/seller_order/seller_order',
     })
@@ -189,6 +249,17 @@ Page({
 
   // 跳转"地址管理"页面
   toAddress() {
+    // 判断是否登录
+    let openid = util.GetStorageSyncTime("openid")
+    if (openid == "") {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+        duration: 2000
+      })
+      return 
+    }
+  
     wx.navigateTo({
       url: '/pages/address/address',
     })

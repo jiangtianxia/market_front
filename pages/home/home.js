@@ -1,4 +1,7 @@
 // pages/index/index.js
+
+var util = require('../../utils/utils.js')
+
 Page({
 
   /**
@@ -17,51 +20,196 @@ Page({
       '/images/home/swiper.jpg',
       // '/images/home/image.png',
       // '/images/home/image.png'
-    ]
+    ],
+    loading: false,
+    goodsList: [],
+    currPage: 0,
+    PageSize: 2,
+    lastLoadTime: Date.parse(new Date())/1000,
+    emptyGoodsFlag: false
   },
 
+    /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow() {
+    // 判断是否需要重新加载
+    let that = this
+    if (Date.parse(new Date())/1000>that.data.lastLoadTime+60) {
+      that.setData({
+        loading: true,
+        currPage: 0,
+        lastLoadTime: Date.parse(new Date())/1000,
+        emptyGoodsFlag: false
+      })
+
+      wx.request({
+        method: 'GET',
+        url: 'http://127.0.0.1:8888/market/api/v1/goods/hot-recommend?page='+that.data.currPage+"&page_size="+that.data.PageSize,
+        timeout: 30000,
+        fail(res) {
+          that.setData({
+            loading: false,
+          });
+          wx.showToast({
+            title: '获取热门推荐商品失败',
+            icon: 'error',
+            duration: 2000
+          })
+          console.error(res)        
+        },
+        success(res) {
+          if (res.data.code != 0) {
+            that.setData({
+              loading: false,
+            });
+            wx.showToast({
+              title: '获取热门推荐商品失败',
+              icon: 'error',
+              duration: 2000
+            })
+            console.error(res) 
+            return
+          }
+  
+          if (!res.data.data) {
+            that.setData({
+              loading: false,
+              emptyGoodsFlag: true
+            });
+            return
+          }
+  
+          that.setData({
+            loading: false,
+            goodsList: res.data.data.goods_list,
+            currPage: res.data.data.page + 1   
+          })
+        }
+      })
+    }
+  },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
     // 获取商品列表
-    this.getGoodList()
+    let that = this 
+    that.setData({
+      loading: true,
+    })
+
+    wx.request({
+      method: 'GET',
+      url: 'http://127.0.0.1:8888/market/api/v1/goods/hot-recommend?page='+that.data.currPage+"&page_size="+that.data.PageSize,
+      timeout: 30000,
+      fail(res) {
+        that.setData({
+          loading: false,
+        });
+        wx.showToast({
+          title: '获取热门推荐商品失败',
+          icon: 'error',
+          duration: 2000
+        })
+        console.error(res)        
+      },
+      success(res) {
+        if (res.data.code != 0) {
+          that.setData({
+            loading: false,
+          });
+          wx.showToast({
+            title: '获取热门推荐商品失败',
+            icon: 'error',
+            duration: 2000
+          })
+          console.error(res) 
+          return
+        }
+
+        if (!res.data.data) {
+          that.setData({
+            loading: false,
+            emptyGoodsFlag: true
+          });
+          return
+        }
+
+        that.setData({
+          loading: false,
+          goodsList: res.data.data.goods_list,
+          currPage: res.data.data.page + 1   
+        })
+      }
+    })
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
-    console.log("上拉触底了")
-  },
-
-  // 获取商品列表
-  getGoodList() {
-    this.setData({
-      goodList: [
-        {
-          id: 1,
-          cover: "https://img2.baidu.com/it/u=4188744940,4267781379&fm=253&fmt=auto&app=138&f=JPEG?w=785&h=500",
-          title: "可口可乐",
-          buyersCount: 100,
-          price: 5
-        },
-        {
-          id: 2,
-          cover: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F06820af6-efe6-4eac-8045-1a90b89518e2%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1712291909&t=454ad935b2f5ed12aad11173cb5dabb7",
-          title: "小面包",
-          buyersCount: 150, 
-          price: 10
-        },
-        {
-          id: 3,
-          cover: "http://t15.baidu.com/it/u=2032395722,4214994189&fm=224&app=112&f=JPEG?w=500&h=500",
-          title: "辣条",
-          buyersCount: 200,
-          price: 3
+    // 获取商品列表
+    let that = this 
+    that.setData({
+      loading: true,
+    })
+    wx.request({
+      method: 'GET',
+      url: 'http://127.0.0.1:8888/market/api/v1/goods/hot-recommend?page='+that.data.currPage+"&page_size="+that.data.PageSize,
+      timeout: 30000,
+      fail(res) {
+        that.setData({
+          loading: false,
+        });
+        wx.showToast({
+          title: '获取热门推荐商品失败',
+          icon: 'error',
+          duration: 2000
+        })
+        console.error(res)        
+      },
+      success(res) {
+        if (res.data.code != 0) {
+          that.setData({
+            loading: false,
+          });
+          wx.showToast({
+            title: '获取热门推荐商品失败',
+            icon: 'error',
+            duration: 2000
+          })
+          console.error(res) 
+          return
         }
-      ],
+
+        if (res.data.data == null) {
+          that.setData({
+            loading: false,
+            emptyGoodsFlag: true
+          });
+          return
+        }
+
+        let currGoodsList = that.data.goodsList
+        let mp = new Map()
+        for (let item of currGoodsList) {
+          mp.set(item.id)
+        }
+
+        for (let item of res.data.data.goods_list) {
+          if (!mp.has(item.id)) {
+            currGoodsList.push(item)
+          }
+        }
+
+        that.setData({
+          loading: false,
+          goodsList: currGoodsList,
+          currPage: res.data.data.page + 1  
+        })
+      }
     })
   },
 
@@ -115,7 +263,17 @@ Page({
 
   // 点击"商品", 跳转至商品详细信息页
   toGoodDetail(event) {
-    console.log(event.currentTarget.dataset.id)
+    // 判断是否登录
+    let openid = util.GetStorageSyncTime("openid")
+    if (openid == "") {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+        duration: 2000
+      })
+      return 
+    }
+
     let id = event.currentTarget.dataset.id
     wx.navigateTo({
       url: '/pages/good_detail/good_detail?id=' + id,

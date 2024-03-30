@@ -1,31 +1,67 @@
 // pages/good_detail/good_detail.js
+
+var util = require('../../utils/utils.js')
+
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    loading: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    console.log(options)
-    // 根据商品id, 获取商品详细信息
-    this.setData({
-      good: {
-        id: 1,
-        cover: "https://img2.baidu.com/it/u=4188744940,4267781379&fm=253&fmt=auto&app=138&f=JPEG?w=785&h=500",
-        price: 5,
-        buyersCount: 100,
-        title: "可口可乐",
-        describe: "可口可乐公司为中国消费者带来全品类饮料选择,提供20多个品牌、约100多种产品。 探索我们的品牌 水资源战略 2014年起至今,可口可乐中国每年均实现了100%“水回馈”的目标。",
-        describeImages: [
-          "https://img2.baidu.com/it/u=4188744940,4267781379&fm=253&fmt=auto&app=138&f=JPEG?w=785&h=500",
-          "https://img2.baidu.com/it/u=4188744940,4267781379&fm=253&fmt=auto&app=138&f=JPEG?w=785&h=500"
-        ]
+    let that = this
+    // 获取openid与商品id
+    let openid = util.GetStorageSyncTime("openid")
+    let goodsId = options.id
+
+    that.setData({
+      loading: true,
+    });
+
+    // 发起请求
+    wx.request({
+      method: 'GET',
+      url: 'http://127.0.0.1:8888/market/api/v1/goods/detail?openid='+openid+"&goods_id="+goodsId,
+      timeout: 30000,
+      header: {
+        "Authorization": util.GetStorageSyncTime("token")
+      },
+      fail(res) {
+        that.setData({
+          loading: false,
+        });
+        wx.showToast({
+          title: '获取商品详细信息失败',
+          icon: 'error',
+          duration: 2000
+        })
+        console.error(res)        
+      },
+      success(res) {
+        if (res.data.code != 0) {
+          that.setData({
+            loading: false,
+          });
+          wx.showToast({
+            title: '获取商品详细信息失败',
+            icon: 'error',
+            duration: 2000
+          })
+          console.error(res) 
+          return
+        }
+
+        that.setData({
+          loading: false,
+          goods: res.data.data,
+        })
       }
     })
   },

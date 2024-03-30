@@ -125,3 +125,18 @@
   color: red;
   font-size: 40rpx;
 }
+
+.empty-goods {
+  height: 50rpx;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-goods-text {
+  font-size: 16px;
+  color: #999;
+  margin-top: 20px;
+}
+

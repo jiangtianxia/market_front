@@ -8,9 +8,9 @@
   </view>
   <view class='consignee-info' wx:if="{{addressInfo != null}}">
     <text class='grow'>{{addressInfo.consignee}}</text>
-    <text class='tel'>{{addressInfo.phoneHidden}}</text>
+    <text class='tel'>{{addressInfo.phone}}</text>
   </view>
-  <text class='location' wx:if="{{addressInfo != null}}" >{{addressInfo.addressSummary}}</text>
+  <text class='location' wx:if="{{addressInfo != null}}" >{{addressInfo.address}}</text>
 </view>
 
 
@@ -50,3 +50,5 @@
     <view class="submit-box" bindtap="submitOrder">提交订单</view>
   </view>
 </view>
+
+<loading hidden="{{!loading}}">加载中...</loading>

@@ -24,6 +24,7 @@ Page({
     contact: '',
     phone: '',
     uploading: false,
+    publishing: false,
   },
 
     /**
@@ -31,8 +32,9 @@ Page({
    */
   onShow() {
     this.setData({
-      uploading : false
-    })
+      uploading: false,
+      publishing: false,
+    });
   },
 
   // 输入商品名称
@@ -108,6 +110,17 @@ Page({
   // 选择封面图片
   chooseCoverImage() {
     let that = this
+
+    let openid = util.GetStorageSyncTime("openid")
+    if (openid == "") {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+        duration: 2000
+      })
+      return 
+    }
+
     wx.chooseMedia({
       count: 1,
       mediaType: ['image'],
@@ -135,7 +148,6 @@ Page({
           that.setData({
             uploading: false,
           });
-
           // 上传失败
           if (err) {
             wx.showToast({
@@ -182,6 +194,16 @@ Page({
 
   // 选择描述图片
   chooseDescImages() {
+    let openid = util.GetStorageSyncTime("openid")
+    if (openid == "") {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+        duration: 2000
+      })
+      return 
+    }
+
     var that = this
     const currLen = this.data.descriptionImagesUrl.length
     if (currLen == this.data.maxDescImageCount) {
@@ -278,9 +300,9 @@ Page({
   // 发布商品
   submitForm() {
     // 在此处执行提交表单的逻辑，上传商品信息到服务器等
-    console.log('提交表单:', this.data);
     const data = this.data
 
+    var that = this
     // 校验数据是否为空
     if (!data.name) {
       wx.showToast({
@@ -352,18 +374,89 @@ Page({
       })
       return
     }
+    if (data.phone.length != 11) {
+      wx.showToast({
+        icon: 'error',
+        title: '联系电话非法',
+      })
+      return
+    }
 
-    this.setData({
-      name: '',
-      selectedCategory: '',
-      price: '',
-      stock: '',
-      coverUrl: '',
-      description: '',
-      descriptionImagesUrl: [],
-      contactPerson: '',
-      phone: '',
-      contact: ''
-    });
+    let openid = util.GetStorageSyncTime("openid")
+    if (openid == "") {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+        duration: 2000
+      })
+      return 
+    }
+
+    // 显示"发布中"图标
+    this.setData({publishing: true})
+
+    // 上传商品到后端
+    wx.request({
+      method: 'POST',
+      url: 'http://127.0.0.1:8888/market/api/v1/goods/publish',
+      header: {
+        "Authorization": util.GetStorageSyncTime("token")
+      },
+      data: {
+        user_openid: util.GetStorageSyncTime("openid"),
+        goods_name: data.name,
+        goods_category: data.selectedCategory,
+        goods_price: parseFloat(data.price),
+        goods_stock: parseInt(data.stock),
+        goods_cover_url: data.coverUrl,
+        goods_desc: data.description,
+        goods_desc_url: data.descriptionImagesUrl.join(","),
+        goods_contact_name: data.contact,
+        goods_contact_phone: data.phone,
+      },
+      fail(res) {
+        that.setData({
+          publishing: false,
+        });
+        wx.showToast({
+          title: '商品发布失败',
+          icon: 'error',
+          duration: 2000
+        })
+        console.error(res)        
+      },
+      success(res) {
+        // 发布失败
+        if (res.data.code != 0) {
+          that.setData({
+            publishing: false,
+          });
+          wx.showToast({
+            title: '商品发布失败',
+            icon: 'error',
+            duration: 2000
+          })
+          console.error(res)
+          return
+        }
+        wx.showToast({
+          title: '商品发布成功',
+          icon: 'success',
+          duration: 2000
+        })
+        that.setData({
+          name: '',
+          selectedCategory: '',
+          price: '',
+          stock: '',
+          coverUrl: '',
+          description: '',
+          descriptionImagesUrl: [],
+          phone: '',
+          contact: '',
+          publishing: false
+        });
+      }
+    })
   },
 })

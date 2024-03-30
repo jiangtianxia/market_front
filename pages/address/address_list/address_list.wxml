@@ -3,12 +3,12 @@
 <view class="addresses {{(!loading) ? '':'hidden'}}">
   <view wx:for="{{addressesList}}" wx:for-item="address" wx:for-index="index" class="address" wx:key="address_id">
     <view class="select-box">
-      <image src="{{address.address_id == currSelectAddrId ? '/images/choose_yes.png' : '/images/choose_no.png'}}" class="choose-img" bindtap="toggleSelect" data-address-id="{{address.address_id}}"></image>
+      <image src="{{address.address_id == currSelectAddrId ? '/images/choose_yes.png' : '/images/choose_no.png'}}" class="choose-img" bindtap="toggleSelect" data-address-id="{{address.id}}"></image>
     </view>
 		<view class="detail">
 		  <view class="customer">
 		    <view class="reciver">收件人：{{ address.consignee }}</view>
-		    <view class="tel">{{ address.mobile }} </view>
+		    <view class="tel">{{ address.phone }} </view>
 		  </view>
 		  <view class="addr">{{ address.lareaName }}{{ address.address }} </view>
 		</view>

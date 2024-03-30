@@ -36,9 +36,12 @@ const COSSDK = new COS({
           StartTime: res.data.data.start_time,
           ExpiredTime: res.data.data.expired_time,  
         });
+      }, fail(err) {
+        console.log("get credential failed, err:", err)
+        callback({});
       }
     })
-    sleep(10)
+    sleep(3)
   }
 });
 

@@ -1,22 +1,22 @@
 <!--pages/address/address.wxml-->
 
 <view class="addresses {{(!loading) ? '':'hidden'}}">
-  <view wx:for="{{addressesList}}" wx:for-item="address" wx:for-index="index" class="address" wx:key="address_id">
+  <view wx:for="{{addressesList}}" wx:for-item="address" wx:for-index="index" class="address" wx:key="id">
 		<view class="detail">
 		  <view class="customer">
 		    <view class="reciver">收件人：{{ address.consignee }}</view>
-		    <view class="tel">{{ address.mobile }} </view>
+		    <view class="tel">{{ address.phone }} </view>
 		  </view>
-		  <view class="addr">{{ address.lareaName }}{{ address.address }} </view>
+		  <view class="addr">{{ address.address }} </view>
 		</view>
 		<view class="operation">
       <view class="set-default-box">
-        <image src="{{address.is_default ? '/images/choose_yes.png' : '/images/choose_no.png'}}" class="choose-img" bindtap="toggleSelect" data-address-id="{{address.address_id}}"></image>
+        <image src="{{address.is_default ? '/images/choose_yes.png' : '/images/choose_no.png'}}" class="choose-img" bindtap="toggleSelect" data-address-id="{{address.id}}"></image>
         <view>设置为默认</view>
       </view>
       <view class="edit-delete-box">
-        <view class="edit" data-address-id="{{address.address_id}}" bindtap="editAddress">编辑</view>  
-        <view class="delete" data-address-id="{{address.address_id}}" bindtap="deleteAddress">删除</view>  
+        <view class="edit" data-address-id="{{address.id}}" bindtap="editAddress">编辑</view>  
+        <view class="delete" data-address-id="{{address.id}}" bindtap="deleteAddress">删除</view>  
       </view>
 		</view>
 	</view>
@@ -33,3 +33,4 @@
 </block>
 
 <loading hidden="{{!loading}}">正在加载中...</loading>
+<loading hidden="{{!deleteing}}">删除地址中...</loading>

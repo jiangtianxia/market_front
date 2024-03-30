@@ -88,3 +88,4 @@
 
 
 <loading hidden="{{!uploading}}">图片上传中...</loading>
+<loading hidden="{{!publishing}}">商品发布中...</loading>

@@ -4,19 +4,19 @@
   <!-- 收货人 -->
   <view class="form-group">
     <text class="label">收货人： </text>
-    <input class="input" type="text" placeholder="请输入收货人真实姓名" bindinput="inputName" value="{{name}}"/>
+    <input class="input" type="text" maxlength="30" placeholder="请输入收货人真实姓名" bindinput="inputConsignee" value="{{consignee}}"/>
   </view>
 
   <!-- 手机号 -->
   <view class="form-group">
     <text class="label">手机号： </text>
-    <input class="input" type="text" placeholder="请输入收货人手机号" bindinput="inputName" value="{{name}}"/>
+    <input class="input" type="text" maxlength="11" placeholder="请输入收货人手机号" bindinput="inputPhone" value="{{phone}}"/>
   </view>
 
   <!-- 详细地址 -->
   <view class="address-form-group">
     <text class="address-label">详细地址： </text>
-    <textarea class="address-textarea" maxlength="200" placeholder="请输入收货人详细地址" bindinput="inputDescription" value="{{address}}"></textarea>
+    <textarea class="address-textarea" maxlength="200" placeholder="请输入收货人详细地址" bindinput="inputAddress" value="{{address}}"></textarea>
   </view>
 
   <!-- 发布按钮 -->
@@ -26,3 +26,5 @@
     </button>
   </view>
 </view>
+
+<loading hidden="{{!loading}}">修改地址中...</loading>

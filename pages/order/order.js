@@ -1,4 +1,7 @@
 // pages/order/order.js
+
+var util = require('../../utils/utils.js')
+
 Page({
 
   /**
@@ -30,7 +33,78 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad() {
+  onLoad() {},
+
+  onShow() {
+    // 先获取缓存
+    let addr = util.GetStorageSyncTime("select-address")
+    util.DelStorageSyncTime("select-address")
+    if (addr) {
+      this.setData({
+        loading: false,      
+        addressInfo: addr,
+      })     
+      return
+    }
+
+    // 判断是否登录
+    let openid = util.GetStorageSyncTime("openid")
+    if (openid == "") {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+        duration: 2000
+      })
+      return 
+    }
+
+    let that = this
+    // 获取默认收货地址
+    wx.request({
+      method: 'GET',
+      url: 'http://127.0.0.1:8888/market/api/v1/addr/get-default?openid='+openid,
+      timeout: 30000,
+      header: {
+        "Authorization": util.GetStorageSyncTime("token")
+      },
+      fail(res) {
+        that.setData({
+          loading: false,
+        });
+        wx.showToast({
+          title: '获取默认地址失败',
+          icon: 'error',
+          duration: 2000
+        })
+        console.error(res)        
+      },
+      success(res) {
+        if (res.data.code != 0) {
+          that.setData({
+            loading: false,
+          });
+          wx.showToast({
+            title: '获取默认地址失败',
+            icon: 'error',
+            duration: 2000
+          })
+          console.error(res) 
+          return
+        }
+
+        if (!res.data.data) {
+          that.setData({
+            loading: false,
+          })
+          return
+        }
+
+        that.setData({
+          loading: false,      
+          addressInfo: res.data.data,
+        })
+      }
+    })
   },
 
   // 用户点击"收货地址", 选择地址
@@ -38,18 +112,21 @@ Page({
     wx.navigateTo({
       url: '/pages/address/address_list/address_list',
     })
-    console.log("选择地址")
-    this.setData({
-      addressInfo: {
-        consignee: "张三",
-        phoneHidden: "137*****273",
-        addressSummary: "广东省深圳市南山区"
-      }
-    })
   },
 
   // 点击"商品", 跳转至商品详细信息页
   toGoodDetail(event) {
+    // 判断是否登录
+    let openid = util.GetStorageSyncTime("openid")
+    if (openid == "") {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+        duration: 2000
+      })
+      return 
+    }
+
     console.log(event.currentTarget.dataset.id)
     let id = event.currentTarget.dataset.id
     wx.navigateTo({

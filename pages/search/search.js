@@ -1,3 +1,6 @@
+
+var util = require('../../utils/utils.js')
+
 Page({
   /**
    * 页面的初始数据
@@ -6,6 +9,11 @@ Page({
     keyword: "",
     hotKeywordList: [],
     isShow: true,
+    currPage: 1,
+    PageSize: 4,
+    currOrder: "buy_count",
+    currSort: -1,
+    loading: false,
 
     /**
       * 排序规则数据
@@ -25,32 +33,78 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    // 如果需要展示后台数据，可以在此处修改
-    // wx.request({
-    //   url: util.url+'/dataInfo/Goods/hotKeywords',
-    //   success:res=>{
-    //     console.log(res.data)
-    //     if(res.data.status===200){
-    //       this.setData({
-    //         contentList:res.data.data
-    //       })
-    //     }
-    //   }
+    // this.setData({
+    //   hotKeywordList: [
+    //     { id: 1, text: "热门搜索词1" },
+    //     { id: 2, text: "热门搜索词2" },
+    //     // 其他热门搜索词...
+    //   ]
     // })
-    this.setData({
-      hotKeywordList: [
-        { id: 1, text: "热门搜索词1" },
-        { id: 2, text: "热门搜索词2" },
-        // 其他热门搜索词...
-      ]
-    })
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
-    console.log("上拉触底了")
+    if (this.isShow) {
+      return
+    }
+
+    this.setData({
+      loading: true,
+    });
+
+    // 执行搜索逻辑
+    let that = this
+    let where = "name:" + that.data.keyword
+
+    // 发起请求获取数据
+    wx.request({
+      method: 'GET',
+      url: 'http://127.0.0.1:8888/market/api/v1/goods/search?page='+that.data.currPage+"&page_size="+that.data.PageSize+"&where="+where+"&order="+that.data.currOrder+"&sort="+that.data.currSort,
+      timeout: 30000,
+      fail(res) {
+        that.setData({
+          loading: false,
+        });
+        wx.showToast({
+          title: '查询商品失败',
+          icon: 'error',
+          duration: 2000
+        })
+        console.error(res)        
+      },
+      success(res) {
+        console.log(res)
+        if (res.data.code != 0) {
+          that.setData({
+            loading: false,
+          });
+          wx.showToast({
+            title: '查询商品失败',
+            icon: 'error',
+            duration: 2000
+          })
+          console.error(res) 
+          return
+        }
+
+        if (!res.data.data) {
+          that.setData({
+            loading: false,
+            emptyGoodsFlag: true
+          });
+          return
+        }
+
+        // 设置数据
+        that.setData({
+          loading: false,
+          currPage: that.data.currPage+1,
+          goodsList: res.data.data.goods_list
+        });
+      }
+    })
   },
 
   // 在"搜索栏"添加搜索值时, 设置对应关键字
@@ -65,147 +119,192 @@ Page({
   searchBtn() {
     let keyword = this.data.keyword;
 
-    // 如果搜索关键字为空，且热门关键字列表不为空，则使用第一个热门关键字作为搜索关键字
-    if (keyword == "" && this.data.hotKeywordList.length > 0) {
-      keyword = this.data.hotKeywordList[0].text;
-      this.setData({
-        keyword: keyword
-      });
+    if (keyword.length == 0) {
+      wx.showToast({
+        title: '请输入关键词',
+        icon: 'none',
+        duration: 2000
+      })      
+      return
     }
+
+    this.setData({
+      currPage: 1,
+      isShow: false,
+      loading: true,
+    });
 
     // 执行搜索逻辑
-    this.search(keyword);
-  },
+    let that = this
+    let where = "name:" + keyword
 
-  // 执行搜索逻辑
-  search(keyword) {
-    this.setData({isShow: false})
+    // 发起请求获取数据
+    wx.request({
+      method: 'GET',
+      url: 'http://127.0.0.1:8888/market/api/v1/goods/search?page='+that.data.currPage+"&page_size="+that.data.PageSize+"&where="+where+"&order="+that.data.currOrder+"&sort="+that.data.currSort,
+      timeout: 30000,
+      fail(res) {
+        that.setData({
+          loading: false,
+        });
+        wx.showToast({
+          title: '查询商品失败',
+          icon: 'error',
+          duration: 2000
+        })
+        console.error(res)        
+      },
+      success(res) {
+        console.log(res)
+        if (res.data.code != 0) {
+          that.setData({
+            loading: false,
+          });
+          wx.showToast({
+            title: '查询商品失败',
+            icon: 'error',
+            duration: 2000
+          })
+          console.error(res) 
+          return
+        }
 
-    if (keyword == "a") {
-      this.setData({
-        goodList: [
-          {
-            id: 1,
-            cover: "https://img2.baidu.com/it/u=4188744940,4267781379&fm=253&fmt=auto&app=138&f=JPEG?w=785&h=500",
-            title: "可口可乐",
-            buyersCount: 100,
-            price: 5
-          },
-        ]
-      })
-    }
+        if (!res.data.data) {
+          that.setData({
+            loading: false,
+            emptyGoodsFlag: true
+          });
+          return
+        }
 
-    if (keyword == "b") {
-      this.setData({
-        goodList: [
-          {
-            id: 2,
-            cover: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F06820af6-efe6-4eac-8045-1a90b89518e2%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1712291909&t=454ad935b2f5ed12aad11173cb5dabb7",
-            title: "小面包",
-            buyersCount: 150, 
-            price: 10
-          },
-          {
-            id: 3,
-            cover: "http://t15.baidu.com/it/u=2032395722,4214994189&fm=224&app=112&f=JPEG?w=500&h=500",
-            title: "辣条",
-            buyersCount: 200,
-            price: 3
-          },
-          {
-            id: 4,
-            cover: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F06820af6-efe6-4eac-8045-1a90b89518e2%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1712291909&t=454ad935b2f5ed12aad11173cb5dabb7",
-            title: "小面包",
-            buyersCount: 150, 
-            price: 10
-          },
-          {
-            id: 5,
-            cover: "http://t15.baidu.com/it/u=2032395722,4214994189&fm=224&app=112&f=JPEG?w=500&h=500",
-            title: "辣条",
-            buyersCount: 200,
-            price: 3
-          },
-          {
-            id: 6,
-            cover: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F06820af6-efe6-4eac-8045-1a90b89518e2%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1712291909&t=454ad935b2f5ed12aad11173cb5dabb7",
-            title: "小面包",
-            buyersCount: 150, 
-            price: 10
-          },
-          {
-            id: 7,
-            cover: "http://t15.baidu.com/it/u=2032395722,4214994189&fm=224&app=112&f=JPEG?w=500&h=500",
-            title: "辣条",
-            buyersCount: 200,
-            price: 3
-          },
-          {
-            id: 8,
-            cover: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F06820af6-efe6-4eac-8045-1a90b89518e2%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1712291909&t=454ad935b2f5ed12aad11173cb5dabb7",
-            title: "小面包",
-            buyersCount: 150, 
-            price: 10
-          },
-          {
-            id: 9,
-            cover: "http://t15.baidu.com/it/u=2032395722,4214994189&fm=224&app=112&f=JPEG?w=500&h=500",
-            title: "辣条",
-            buyersCount: 200,
-            price: 3
-          },
-          {
-            id: 10,
-            cover: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F06820af6-efe6-4eac-8045-1a90b89518e2%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1712291909&t=454ad935b2f5ed12aad11173cb5dabb7",
-            title: "小面包",
-            buyersCount: 150, 
-            price: 10
-          },
-          {
-            id: 11,
-            cover: "http://t15.baidu.com/it/u=2032395722,4214994189&fm=224&app=112&f=JPEG?w=500&h=500",
-            title: "辣条",
-            buyersCount: 200,
-            price: 3
-          }
-        ]
-      })
-    }
+        // 设置数据
+        that.setData({
+          loading: false,
+          currPage: that.data.currPage+1,
+          goodsList: res.data.data.goods_list
+        });
+      }
+    })
   },
 
   // 点击"热门搜索文字"时, 搜索商品
   hotKeywords(e) {
-    let keyword = e.currentTarget.dataset.text;
-    this.setData({
-      keyword: keyword
-    })
-    this.search(keyword);
+    // let keyword = e.currentTarget.dataset.text;
+    // this.setData({
+    //   keyword: keyword
+    // })
+    // this.search(keyword);
   },
 
   // 切换"排序"规则时, 执行相关操作
   toggleSortOrder(event) {
+    let that = this
+    that.setData({
+      loading: true,
+      emptyGoodsFlag: false
+    });
     const newType = event.currentTarget.dataset.type;
-    const currType = this.data.selectedSortOrder;
-    const currArrowIcon = this.data.selectedSortOrderArrowIcon;
-    const downArrowIcon = this.data.downArrowIcon;
-    const upArrowIcon = this.data.upArrowIcon;
+    const currType = that.data.selectedSortOrder;
+    const currArrowIcon = that.data.selectedSortOrderArrowIcon;
+    const downArrowIcon = that.data.downArrowIcon;
+    const upArrowIcon = that.data.upArrowIcon;
   
-    let priceIcon = this.data.normalArrowIcon;
-    let timeIcon = this.data.normalArrowIcon;
-  
+    let priceIcon = that.data.normalArrowIcon;
+    let timeIcon = that.data.normalArrowIcon;
+    let KeyWhere = "name:" + that.data.keyword
+
     // 如果选中的类型为"热门推荐", 则将图标修改回初始化状态
     if (newType === 'hot') {
-      this.setData({
-        selectedSortOrder: newType,
-        selectedSortOrderArrowIcon: 'normal',
-        currUseArrowIcons: {
-          price: priceIcon,
-          time: timeIcon
+      let newOrder = "buy_count"
+      let newSort = -1
+      let newPage = 1
+
+
+      // 发起请求获取数据
+      wx.request({
+        method: 'GET',
+        url: 'http://127.0.0.1:8888/market/api/v1/goods/search?page='+newPage+"&page_size="+that.data.PageSize+"&where="+KeyWhere+"&order="+newOrder+"&sort="+newSort,
+        timeout: 30000,
+        fail(res) {
+          that.setData({
+            loading: false,
+            currPage: newPage,
+            currOrder: newOrder,
+            currSort: newSort,
+            selectedSortOrder: newType,
+            selectedSortOrderArrowIcon: 'normal',
+            currUseArrowIcons: {
+              price: priceIcon,
+              time: timeIcon
+            }
+          });
+          wx.showToast({
+            title: '查询商品失败',
+            icon: 'error',
+            duration: 2000
+          })
+          console.error(res)        
+        },
+        success(res) {
+          console.log(res)
+          if (res.data.code != 0) {
+            that.setData({
+              loading: false,
+              currPage: newPage,
+              currOrder: newOrder,
+              currSort: newSort,
+              selectedSortOrder: newType,
+              selectedSortOrderArrowIcon: 'normal',
+              currUseArrowIcons: {
+                price: priceIcon,
+                time: timeIcon
+              }
+            });
+            wx.showToast({
+              title: '查询商品失败',
+              icon: 'error',
+              duration: 2000
+            })
+            console.error(res) 
+            return
+          }
+
+          if (!res.data.data) {
+            that.setData({
+              loading: false,
+              currPage: newPage+1,
+              currOrder: newOrder,
+              currSort: newSort,
+              selectedSortOrder: newType,
+              selectedSortOrderArrowIcon: 'normal',
+              currUseArrowIcons: {
+                price: priceIcon,
+                time: timeIcon
+              },
+              goodsList: [],
+              emptyGoodsFlag: true
+            });
+            return
+          }
+
+          // 设置数据
+          that.setData({
+            loading: false,
+            currPage: newPage+1,
+            currOrder: newOrder,
+            currSort: newSort,
+            selectedSortOrder: newType,
+            selectedSortOrderArrowIcon: 'normal',
+            currUseArrowIcons: {
+              price: priceIcon,
+              time: timeIcon
+            },
+            goodsList: res.data.data.goods_list
+          });
         }
-      });
+      })      
       return;
     }
-  
     // 判断新选中类型是否和当前选中类型相同
     const isSelectedTypeSame = currType === newType;
   
@@ -228,10 +327,84 @@ Page({
         time: timeIcon
       }
     });
+
+    let newOrder = newType == 'price' ? newType : 'created_at'
+    let newSort = newArrowIcon === 'down' ? -1 : 1
+    let newPage = 1
+
+    // 发起请求获取数据
+    wx.request({
+      method: 'GET',
+      url: 'http://127.0.0.1:8888/market/api/v1/goods/search?page='+newPage+"&page_size="+that.data.PageSize+"&where="+KeyWhere+"&order="+newOrder+"&sort="+newSort,
+      timeout: 30000,
+      fail(res) {
+        that.setData({
+          loading: false,
+          currPage: newPage,
+          currOrder: newOrder,
+          currSort: newSort,
+        });
+        wx.showToast({
+          title: '查询商品失败',
+          icon: 'error',
+          duration: 2000
+        })
+        console.error(res)        
+      },
+      success(res) {
+        console.log(res)
+        if (res.data.code != 0) {
+          that.setData({
+            loading: false,
+            currPage: newPage,
+            currOrder: newOrder,
+            currSort: newSort,
+          });
+          wx.showToast({
+            title: '查询商品失败',
+            icon: 'error',
+            duration: 2000
+          })
+          console.error(res) 
+          return
+        }
+
+        if (!res.data.data) {
+          that.setData({
+            loading: false,
+            currPage: newPage,
+            currOrder: newOrder,
+            currSort: newSort,
+            emptyGoodsFlag: true
+          });
+          return
+        }
+
+        // 设置数据
+        that.setData({
+          loading: false,
+          currPage: newPage+1,
+          currOrder: newOrder,
+          currSort: newSort,
+          goodsList: res.data.data.goods_list
+        });
+      }
+    })
   },
 
   // 点击"商品", 跳转至商品详细信息页
   toGoodDetail(event) {
+    // 判断是否登录
+    let openid = util.GetStorageSyncTime("openid")
+    if (openid == "") {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+        duration: 2000
+      })
+      return 
+    }
+
     console.log(event.currentTarget.dataset.id)
     let id = event.currentTarget.dataset.id
     wx.navigateTo({

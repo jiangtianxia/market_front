@@ -42,16 +42,21 @@
 
 <!-- 商品列表 -->
 <view class="goods-box">
-  <block wx:for="{{goodList}}" wx:key="id">
+  <block wx:for="{{goodsList}}" wx:key="id">
     <view bindtap="toGoodDetail" data-id="{{item.id}}">
-      <image src="{{item.cover}}" class="good-img"></image>
+      <image src="{{item.cover_url}}" class="good-img"></image>
       <view class="good-title">{{item.title}}</view>
       <view class="good-bootom">
-        <view class="good-tag">{{item.buyersCount}}人购买</view>
+        <view class="good-tag">{{item.buy_count}}人购买</view>
         <view class="good-price">￥{{item.price}}</view>
       </view>
     </view>
   </block>
 </view>
 
+<view class="empty-goods"  hidden="{{!emptyGoodsFlag}}">
+  <text class="empty-goods-text" hidden="{{!emptyGoodsFlag}}">已经到底部了, 已无更多商品！！！</text>
+</view>
+
+<loading hidden="{{!loading}}">加载中...</loading>
 <view style="height: 50rpx;"></view>

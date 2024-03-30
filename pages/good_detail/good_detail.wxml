@@ -1,17 +1,17 @@
 <!--pages/good_detail/good_detail.wxml-->
 
 <!-- 商品封面 -->
-<image src="{{good.cover}}" class="good-cover"></image>
+<image src="{{goods.cover_url}}" class="good-cover"></image>
 
 <!-- 价格与已购买信息 -->
 <view class="good-price-tag">
-  <view class="good-price">￥{{good.price}}</view>
-  <view class="good-tag">{{good.buyersCount}}人购买</view>
+  <view class="good-price">￥{{goods.price}}</view>
+  <view class="good-tag">{{goods.buy_count}}人购买</view>
 </view>
 
 <!-- 商品标题 -->
 <view class="good-title-box">
-  <view class="good-title">{{good.title}}</view>
+  <view class="good-title">{{goods.title}}</view>
   <button open-type="share" class="share-but">分享</button>
 </view>
 
@@ -19,8 +19,8 @@
 <!-- 商品详情 -->
 <view class="good-detail-title">商品详情</view>
 <view class="good-detail-box">
-  <view>{{good.describe}}</view>
-  <block wx:for="{{good.describeImages}}" wx:key="index">
+  <view>{{goods.description}}</view>
+  <block wx:for="{{goods.dest_url_list}}" wx:key="index">
     <image src="{{item}}" class="good-detail-img"></image>
   </block>
 </view>
@@ -30,7 +30,7 @@
 <!-- 底部tabbar -->
 <view class="tabbar">
   <!-- 左半部分 -->
-  <view class="cart-num">8</view>
+  <view class="cart-num">{{goods.cart_total_count}}</view>
   <view>
     <image src="/images/cart-red.png" class="cart-img"></image>
   </view>
@@ -41,3 +41,5 @@
     <view class="buy">立即购买</view>
   </view>
 </view>
+
+<loading hidden="{{!loading}}">加载中...</loading>
