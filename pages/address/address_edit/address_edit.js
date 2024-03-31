@@ -17,14 +17,14 @@ Page({
   onLoad(options) {
     // 从缓存中获取信息
     let addrInfo = util.GetStorageSyncTime("edit-address")
-
+    util.DelStorageSyncTime("edit-address")
+    
     this.setData({
       addrId: addrInfo.id,
       consignee: addrInfo.consignee,
       phone: addrInfo.phone,
       address: addrInfo.address
     })
-    console.log(addrInfo)
   },
 
   /**

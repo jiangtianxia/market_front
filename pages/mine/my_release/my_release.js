@@ -182,7 +182,7 @@ Page({
     console.log(event.currentTarget.dataset.id)
     let id = event.currentTarget.dataset.id
     wx.navigateTo({
-      url: '/pages/good_detail/good_detail?id=' + id,
+      url: '/pages/good_detail/good_detail?id=' + id + '&isShow=-1',
     })
   },
 

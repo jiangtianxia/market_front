@@ -1,75 +1,91 @@
 // pages/mine/seller_order/seller_order.js
+
+var util = require('../../../utils/utils.js')
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    status: 0,
-    orderList: [
-      {
-        id: 15237723784,
-        totalMoney: 100,
-        address: "广东省广州市番禺区",
-        name: "张三",
-        phone: "127823792300",
-        time: "2024-03-17 10:30:04",
-        status: 2,
-        goods: [
-          {
-            id: 1,
-            cover: "https://img2.baidu.com/it/u=4188744940,4267781379&fm=253&fmt=auto&app=138&f=JPEG?w=785&h=500",
-            title: "可口可乐",
-            number: 10,
-            price: 5
-          },
-          {
-            id: 2,
-            cover: "http://t15.baidu.com/it/u=2032395722,4214994189&fm=224&app=112&f=JPEG?w=500&h=500",
-            title: "辣条",
-            number: 20,
-            price: 3
-          },          
-        ]
-      },
-      {
-        id: 15237723786,
-        totalMoney: 60,
-        address: "广东省广州市番禺区",
-        name: "张三",
-        phone: "127823792300",
-        time: "2024-03-17 10:30:04",
-        status: 3,
-        goods: [
-          {
-            id: 1,
-            cover: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F06820af6-efe6-4eac-8045-1a90b89518e2%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1712291909&t=454ad935b2f5ed12aad11173cb5dabb7",
-            title: "小面包",
-            number: 10,
-            price: 6
-          },
-          {
-            id: 2,
-            cover: "http://t15.baidu.com/it/u=2032395722,4214994189&fm=224&app=112&f=JPEG?w=500&h=500",
-            title: "辣条",
-            number: 20,
-            price: 3
-          },          
-        ]
-      }
-    ],
+    status: 2,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    this.getOrderList(true)
+    this.setData({
+      status: 2
+    })
+  },
 
+  onShow() {
+    this.getOrderList(false)
   },
 
   // 获取订单列表
-  getOrderList() {
+  getOrderList(firstFlag) {
+    // 判断是否登录
+    let openid = util.GetStorageSyncTime("openid")
+    if (openid == "") {
+        wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+        duration: 2000
+      })
+      return 
+    }
+        
+    let that = this
 
+    if (firstFlag) {
+      that.setData({
+        loading: true,
+      });
+    }
+
+    // 发起请求获取全部购物车信息
+    wx.request({
+      method: 'GET',
+      url: 'http://127.0.0.1:8888/market/api/v1/order/list?from_openid='+openid +'&status=' + that.data.status,
+      timeout: 30000,
+      header: {
+        "Authorization": util.GetStorageSyncTime("token")
+      },
+      fail(res) {
+        that.setData({
+          loading: false,
+        });
+        wx.showToast({
+          title: '获取订单信息失败',
+          icon: 'error',
+          duration: 2000
+        })
+        console.error(res)        
+      },
+      success(res) {
+        if (res.data.code != 0) {
+          that.setData({
+            loading: false,
+          });
+          wx.showToast({
+            title: '获取订单信息失败',
+            icon: 'error',
+            duration: 2000
+          })
+          console.error(res) 
+          return
+        }
+
+        console.log(res.data)
+        that.setData({
+          loading: false,  
+          orderList: res.data.data.order_list
+        })
+      }
+    })
   },
 
   // 选择订单类型
@@ -78,6 +94,7 @@ Page({
     this.setData({
       status
     })
+    this.getOrderList(true)
   },
 
   // 点击"商品", 跳转至商品详细信息页
@@ -85,32 +102,101 @@ Page({
     console.log(event.currentTarget.dataset.id)
     let id = event.currentTarget.dataset.id
     wx.navigateTo({
-      url: '/pages/good_detail/good_detail?id=' + id,
+      url: '/pages/good_detail/good_detail?id=' + id + '&isShow=-1',
     })
   },
 
-  // 支付订单
-  pay(event) {
-    let index = event.currentTarget.dataset.index
-    wx.showModal({
-      title: '提示',
-      content: '是否支付商品价格' + this.data.orderList[index].totalMoney + '元',
-      confirmText: '支付'
-    })
-    .then(res=>{
-      if(res.confirm == true) {
+  // 更新订单状态
+  updateOrder(orderId, status) {
+    // 修改订单的收货地址
+    let that = this
+    // 判断是否登录
+    let openid = util.GetStorageSyncTime("openid")
+    if (openid == "") {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+        duration: 2000
+      })
+      return 
+    }
+    that.setData({
+      updateing: true,
+    });
+    wx.request({
+      method: 'POST',
+      url: 'http://127.0.0.1:8888/market/api/v1/order/update',
+      timeout: 30000,
+      data: {
+        order_id_list: orderId,
+        status_update_flag: true,
+        status: status,
+        curr_status: that.data.status
+      },
+      header: {
+        "Authorization": util.GetStorageSyncTime("token")
+      },
+      fail(res) {
+        that.setData({
+          updateing: false,
+        });
         wx.showToast({
-          title: '支付成功',
-        })        
-      } else {
-        wx.showToast({
+          title: '更新订单失败',
           icon: 'error',
-          title: '支付失败',
+          duration: 2000
+        })
+        console.error(res)        
+      },
+      success(res) {
+        if (res.data.code != 0) {
+          that.setData({
+            updateing: false,
+          });
+          wx.showToast({
+            title: '更新订单失败',
+            icon: 'error',
+            duration: 2000
+          })
+          console.error(res) 
+          return
+        }
+
+        // 移除对应订单
+        let newOrderList = []
+        for (let item of that.data.orderList) {
+          if (item.order_id != orderId) {
+            newOrderList.push(item)
+          }
+        } 
+        wx.showToast({
+          title: '更新订单成功',
+        }) 
+        that.setData({
+          updateing: false,
+          orderList: newOrderList
         })
       }
     })
+  },
 
-    this.getOrderList()
+  // 已发货
+  sendGoods(event) {
+    let index = event.currentTarget.dataset.index
+    wx.showModal({
+      title: '提示',
+      content: '是否已发货该订单中的商品',
+      confirmText: '已发货'
+    })
+    .then(res=>{
+      if(res.confirm == true) {
+        this.updateOrder(this.data.orderList[index].order_id, 3)
+      } else {
+        wx.showToast({
+          icon: 'error',
+          title: '更新订单失败',
+        })
+      }
+    })
   },
 
   // 取消订单
@@ -123,41 +209,13 @@ Page({
     })
     .then(res=>{
       if(res.confirm == true) {
-        wx.showToast({
-          title: '取消成功',
-        })        
+        this.updateOrder(this.data.orderList[index].order_id, 5) 
       } else {
         wx.showToast({
           icon: 'error',
-          title: '取消失败',
+          title: '更新订单失败',
         })
       }
     })
-
-    this.getOrderList()
-  },
-
-  // 已收货
-  confirmReceipt(event) {
-    let index = event.currentTarget.dataset.index
-    wx.showModal({
-      title: '提示',
-      content: '确认已收货吗',
-      confirmText: '确认'
-    })
-    .then(res=>{
-      if(res.confirm == true) {
-        wx.showToast({
-          title: '保存成功',
-        })        
-      } else {
-        wx.showToast({
-          icon: 'error',
-          title: '保存失败',
-        })
-      }
-    })
-
-    this.getOrderList()
   },
 })

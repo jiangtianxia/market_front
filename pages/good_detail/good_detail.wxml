@@ -28,18 +28,19 @@
 <view style="height: 120rpx;"></view>
 
 <!-- 底部tabbar -->
-<view class="tabbar">
+<view class="tabbar" wx:if="{{isShow}}">
   <!-- 左半部分 -->
   <view class="cart-num">{{goods.cart_total_count}}</view>
-  <view>
+  <view bindtap="toCart">
     <image src="/images/cart-red.png" class="cart-img"></image>
   </view>
 
   <!-- 右半部分 -->
   <view class="tabbar-right">
-    <view class="add-cart">加入购物车</view>
-    <view class="buy">立即购买</view>
+    <view class="add-cart" bindtap="addToCart">加入购物车</view>
+    <view class="buy" bindtap="ToOrder">立即购买</view>
   </view>
 </view>
 
 <loading hidden="{{!loading}}">加载中...</loading>
+<loading hidden="{{!adding}}">加入购物车中...</loading>

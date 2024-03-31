@@ -15,23 +15,23 @@
 
 
 <!-- 订单信息与商品信息模块 -->
-<view class="order-and-goods-info-box">
+<view class="order-and-goods-info-box" wx:for="{{orderList}}" wx:key="id">
   <!-- 订单信息 -->
   <view class="order-box">
-    <text>订单号: 55221233</text>
-    <text>下单时间: 2024-03-17 10:30:04</text>
+    <text>订单号: {{item.order_id}}</text>
+    <text>下单时间: {{item.order_time}}</text>
   </view>
 
   <!-- 商品信息 -->
-  <view class='goods-container' wx:if="{{goods}}">
+  <view class='goods-container'>
     <text class='title'>商品信息</text>
-    <view class='item-box' bindtap="toGoodDetail" wx:for="{{goods}}" wx:key="productId">
-      <image class='goods-cover-img' mode='aspectFill' src="{{item.img}}"></image>
+    <view class='item-box' bindtap="toGoodDetail" data-id="{{item.goods_info.id}}">
+      <image class='goods-cover-img' mode='aspectFill' src="{{item.goods_info.cover_url}}"></image>
       <view class='goods-info-box'>
-        <text class='goods-title'>{{item.name}}</text>
+        <text class='goods-title'>{{item.goods_info.title}}</text>
         <view class='price-box'>
-          <text class='price-text'>￥{{item.price}}</text>
-          <text>x{{item.goodsNumber}}</text>
+          <text class='price-text'>￥{{item.goods_info.price}}</text>
+          <text>x{{item.goods_num}}</text>
         </view>
       </view>
     </view>
@@ -51,4 +51,8 @@
   </view>
 </view>
 
+<view style="height: 200rpx;"></view>
+
 <loading hidden="{{!loading}}">加载中...</loading>
+<loading hidden="{{!updateing}}">更新收货地址中...</loading>
+<loading hidden="{{!submiting}}">支付中...</loading>

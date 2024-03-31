@@ -89,6 +89,28 @@ Page({
 
   // 点击发布"按钮"
   submitForm() {
+    if (!this.data.consignee) {
+      wx.showToast({
+        icon: 'error',
+        title: '收货人为空',
+      })
+      return
+    } 
+    if (!this.data.phone) {
+      wx.showToast({
+        icon: 'error',
+        title: '手机号为空',
+      })
+      return
+    } 
+    if (!this.data.address) {
+      wx.showToast({
+        icon: 'error',
+        title: '详细地址为空',
+      })
+      return
+    } 
+
     // 判断是否登录
     let openid = util.GetStorageSyncTime("openid")
     if (openid == "") {

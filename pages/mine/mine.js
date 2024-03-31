@@ -93,6 +93,8 @@ Page({
                 return
               }
 
+              wx.setStorageSync("liKeywordList", [])
+
               // 登录成功，获取具体数据
               const { openid, token } = res.data.data;
 
@@ -177,7 +179,8 @@ Page({
               // 删除缓存
               util.DelStorageSyncTime("avatar_url")
               util.DelStorageSyncTime("openid")
-              util.DelStorageSyncTime("token")         
+              util.DelStorageSyncTime("token")
+              wx.setStorageSync("liKeywordList", [])         
 
               // 设置默认头像
               that.setData({

@@ -34,12 +34,16 @@ Page({
    */
   onLoad: function (options) {
     // this.setData({
-    //   hotKeywordList: [
-    //     { id: 1, text: "热门搜索词1" },
-    //     { id: 2, text: "热门搜索词2" },
-    //     // 其他热门搜索词...
-    //   ]
+
     // })
+    // [
+    //   { text: "热门搜索词1" },
+    //   { text: "热门搜索词2" },
+    // ]
+    // 从目标页面中获取全局变量
+    this.setData({
+      hotKeywordList: wx.getStorageSync("liKeywordList")
+    })
   },
 
   /**
@@ -128,6 +132,23 @@ Page({
       return
     }
 
+    // 设置全局变量
+    let currKeywordList = wx.getStorageSync("liKeywordList");
+    let keyItem = [{
+      text: keyword
+    }]
+    currKeywordList = keyItem.concat(currKeywordList)
+
+    if (currKeywordList.length > 10) {
+      currKeywordList.unshift()
+    }
+
+    wx.setStorageSync("liKeywordList", currKeywordList)
+    this.search(keyword)
+  },
+
+  // 执行搜索逻辑
+  search(keyword) {
     this.setData({
       currPage: 1,
       isShow: false,
@@ -189,11 +210,11 @@ Page({
 
   // 点击"热门搜索文字"时, 搜索商品
   hotKeywords(e) {
-    // let keyword = e.currentTarget.dataset.text;
-    // this.setData({
-    //   keyword: keyword
-    // })
-    // this.search(keyword);
+    let keyword = e.currentTarget.dataset.text;
+    this.setData({
+      keyword: keyword
+    })
+    this.search(keyword);
   },
 
   // 切换"排序"规则时, 执行相关操作

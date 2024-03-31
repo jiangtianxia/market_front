@@ -4,7 +4,7 @@
 <view class="search-box">
   <view class="search-input">
     <icon type="search" size="20"></icon>
-    <input type='text' bindinput="searchKeywords" value="{{keyword}}"/>
+    <input placeholder="{{hotKeywordList[0].text}}" type='text' bindinput="searchKeywords" value="{{keyword}}"/>
   </view>
   <button style=" width: 160rpx; " bindtap="searchBtn">搜索</button>
 </view>
@@ -12,12 +12,12 @@
 
 <!-- 热门搜索 -->
 <block wx:if="{{isShow}}">
-  <!-- <text class="text-title">热门搜索</text>
+  <text class="text-title">历史搜索</text>
   <view class="content-box">
   <view class="content-item" wx:for="{{hotKeywordList}}" wx:key="id">
     <text bindtap="hotKeywords" data-text="{{item.text}}">{{item.text}}</text>
   </view>
-  </view> -->
+  </view>
 </block>
 
 <!-- 搜索商品展示 -->

@@ -35,7 +35,7 @@ Page({
   onShow() {
     // 判断是否需要重新加载
     let that = this
-    if (Date.parse(new Date())/1000>that.data.lastLoadTime+60) {
+    if (Date.parse(new Date())/1000>that.data.lastLoadTime+30) {
       that.setData({
         loading: true,
         currPage: 0,
@@ -215,8 +215,6 @@ Page({
 
   // 点击"新品推荐", 跳转事件
   toNewGoodList() {
-    console.log('点击了新品推荐');
-
     // 设置全局变量
     getApp().globalData.category = 'newGood';
 
@@ -227,8 +225,6 @@ Page({
 
   // 点击"二手书籍", 跳转事件
   toOldBookGoodList() {
-    console.log('点击了二手书籍');
-
     // 设置全局变量
     getApp().globalData.category = 'oldBookGood';
 
@@ -239,8 +235,6 @@ Page({
 
   // 点击"日常用品", 跳转事件
   toDailyGoodList() {
-    console.log('点击了日常用品');
-
     // 设置全局变量
     getApp().globalData.category = 'dailyGood';
 
@@ -250,9 +244,7 @@ Page({
   },
 
   // 点击"其他物品", 跳转事件
-  toOtherGoodList() {
-    console.log('点击了其他物品');
-    
+  toOtherGoodList() {    
     // 设置全局变量
     getApp().globalData.category = 'otherGood';
 
